@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
   domain: { type: String, required: true },
   available: { type: Boolean, required: true },
 });
-// 
+//
 const teamSchema = new mongoose.Schema({
   name: { type: String, required: true },
   members: { type: Array, required: true },
@@ -48,9 +48,76 @@ const teamSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema, "Users");
 const teams = mongoose.model("Team", teamSchema, "Teams");
 
-// Routes
+// To Get All directory
 app.get("/", (req, res) => {
-  res.send("Server is running very fast");
+  const routes = [
+    { path: "/", operation: "GET", description: "Home page" },
+    { path: "/allUsers", operation: "GET", description: "Get all users" },
+    { path: "/users", operation: "GET", description: "Get paginated users" },
+    { path: "/users/:id", operation: "GET", description: "Get a user by ID" },
+    { path: "/addUser", operation: "POST", description: "Create a new user" },
+    {
+      path: "/deleteUser/:id",
+      operation: "DELETE",
+      description: "Delete a user",
+    },
+    { path: "/updateUser/:id", operation: "PUT", description: "Update a user" },
+    { path: "/addTeam", operation: "POST", description: "Create a new team" },
+    { path: "/allTeams", operation: "GET", description: "Get all teams" },
+    {
+      path: "/deleteTeam/:id",
+      operation: "DELETE",
+      description: "Delete a team",
+    },
+  ];
+
+  let html = `
+    <html>
+      <head>
+        <title>API Directory</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0 20px;
+            background-color: #f4f4f4;
+          }
+          h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+          }
+          ul {
+            list-style-type: none;
+            padding: 0;
+          }
+          li {
+            background-color: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          }
+          li strong {
+            color: #333;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>API Directory</h1>
+        <ul>`;
+
+  routes.forEach((route) => {
+    html += `<li><strong>${route.path}</strong> - ${route.operation}: ${route.description}</li>`;
+  });
+
+  html += `
+        </ul>
+      </body>
+    </html>`;
+
+  res.send(html);
 });
 
 app.get("/allUsers", async (req, res) => {
