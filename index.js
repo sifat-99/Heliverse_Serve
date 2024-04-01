@@ -121,7 +121,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/allUsers", async (req, res) => {
-  console.log("hit");
   try {
     const allUsers = await User.find({});
     res.json(allUsers);
@@ -161,7 +160,6 @@ app.get("/users", async (req, res) => {
 //  get single user by id
 app.get("/users/:id", async (req, res) => {
   const id = req.params.id;
-  console.log(id);
   const query = { _id: id };
 
   try {
@@ -183,19 +181,15 @@ app.get("/users/:id", async (req, res) => {
 
 // Create a new user
 app.post("/addUser", async (req, res) => {
-  console.log(req.body);
   try {
     const { email } = req.body;
     const allUsers = await User.find({});
-    console.log(allUsers.length);
     const existingUser = await User.findOne({ email });
-    console.log(existingUser);
 
     const newUser = {
       id: allUsers[allUsers.length - 1].id + 1,
       ...req.body,
     };
-    console.log(newUser);
 
     if (existingUser) {
       return res
@@ -220,7 +214,6 @@ app.post("/addUser", async (req, res) => {
 
 app.delete("/deleteUser/:id", async (req, res) => {
   const id = req.params.id;
-  console.log(id);
   const query = { _id: id };
 
   try {
@@ -243,30 +236,25 @@ app.delete("/deleteUser/:id", async (req, res) => {
 // Update User
 app.put("/updateUser/:id", async (req, res) => {
   const updatedUser = req.body;
-  console.log(updatedUser);
   const id = req.params.id;
   const query = { _id: id };
   const user = await User.findOne(query);
-  console.log(user);
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
   try {
     const updated = await User.updateOne(query, { $set: updatedUser });
-    console.log(updated);
     res.json({ message: "User updated successfully", statusCode: 200 });
   } catch {}
 });
 
 // Create new Team
 app.post("/addTeam", async (req, res) => {
-  console.log(req.body);
   try {
     const { name } = req.body;
     const existingTeam = await teams.findOne({ name });
 
     const newTeam = req.body;
-    console.log(newTeam);
 
     if (existingTeam) {
       return res
@@ -289,7 +277,6 @@ app.post("/addTeam", async (req, res) => {
 
 // Get all Teams
 app.get("/allTeams", async (req, res) => {
-  console.log("hit");
   try {
     const allTeams = await teams.find({});
     res.json(allTeams);
@@ -301,7 +288,6 @@ app.get("/allTeams", async (req, res) => {
 // Delete Team
 app.delete("/deleteTeam/:id", async (req, res) => {
   const id = req.params.id;
-  console.log(id);
   const query = { _id: id };
 
   try {
